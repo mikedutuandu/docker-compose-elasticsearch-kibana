@@ -24,6 +24,7 @@ services:
         target: /usr/share/elasticsearch/data
     networks:
       - elastic
+      - ingress
     ports:
       - 9201:9200
 
@@ -51,7 +52,9 @@ services:
         target: /usr/share/elasticsearch/data
     networks:
       - elastic
-
+      - ingress
+    ports:
+      - 9202:9200
 
 
   es03:
@@ -78,6 +81,9 @@ services:
         target: /usr/share/elasticsearch/data
     networks:
       - elastic
+      - ingress
+    ports:
+      - 9203:9200
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.3.1
@@ -94,6 +100,19 @@ services:
         hard: -1
     networks:
       - elastic
+      - ingress
+
+  nginx:
+      image: nginx:latest
+      ports:
+          - 8081:80
+      volumes:
+          - ${PWD}/nginx-config/:/etc/nginx/conf.d/
+      command: /bin/bash -c "nginx -g 'daemon off;'"
+      ulimits:
+        nproc: 65535
+      networks:
+        - ingress
 
 volumes:
   esdata1:
@@ -107,3 +126,4 @@ volumes:
 
 networks:
   elastic:
+  ingress:
