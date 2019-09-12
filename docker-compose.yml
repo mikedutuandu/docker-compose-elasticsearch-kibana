@@ -16,12 +16,8 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - type: volume
-        source: logs
-        target: /var/log
-      - type: volume
-        source: esdata1
-        target: /usr/share/elasticsearch/data
+      - esdata01:/usr/share/elasticsearch/data
+      - "./elastic/elasticsearch1.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
     networks:
       - elastic
       - ingress
@@ -44,18 +40,11 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - type: volume
-        source: logs
-        target: /var/log
-      - type: volume
-        source: esdata2
-        target: /usr/share/elasticsearch/data
+      - esdata02:/usr/share/elasticsearch/data
+      - "./elastic/elasticsearch2.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
     networks:
       - elastic
       - ingress
-    ports:
-      - 9202:9200
-
 
   es03:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
@@ -73,17 +62,11 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - type: volume
-        source: logs
-        target: /var/log
-      - type: volume
-        source: esdata3
-        target: /usr/share/elasticsearch/data
+      - esdata03:/usr/share/elasticsearch/data
+      - "./elastic/elasticsearch3.yml:/usr/share/elasticsearch/config/elasticsearch.yml"
     networks:
       - elastic
       - ingress
-    ports:
-      - 9203:9200
 
   kibana:
     image: docker.elastic.co/kibana/kibana:7.3.1
@@ -115,14 +98,12 @@ services:
         - ingress
 
 volumes:
-  esdata1:
-      driver: local
-  esdata2:
-      driver: local
-  esdata3:
-      driver: local
-  logs:
-      driver: local
+  esdata01:
+    driver: local
+  esdata02:
+    driver: local
+  esdata03:
+    driver: local
 
 networks:
   elastic:
